@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const error = Astro.url.searchParams.get('error');
+const next = Astro.url.searchParams.get('next') ?? '/';
+---
+
+<Layout title="Masuk · Takaaca">
+  <main
+    class="grid min-h-dvh place-items-center px-4 py-10"
+  >
+    <div class="w-full max-w-md">
+      <div class="mb-6 text-center">
+        <span
+          class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-3xl bg-gradient-to-br from-sky-300 to-blush-300 text-3xl shadow-xl shadow-sky-200/60"
+          >💐</span
+        >
+        <h1 class="font-display text-3xl font-bold">Takaaca</h1>
+        <p class="mt-1 text-sm text-ink-soft">Agenda & kenangan untuk kita berdua</p>
+      </div>
+
+      <div class="glass rounded-3xl p-6 sm:p-8">
+        {
+          error && (
+            <p class="mb-4 rounded-2xl bg-blush-100 px-4 py-3 text-sm font-medium text-blush-500">
+              {error}
+            </p>
+          )
+        }
+
+        <form method="POST" action="/api/auth/login" class="space-y-4">
+          <input type="hidden" name="next" value={next} />
+
+          <div>
+            <label for="email" class="mb-1.5 block text-sm font-semibold">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              placeholder="nama@email.com"
+              class="w-full rounded-2xl border border-white bg-white/80 px-4 py-3 text-sm outline-none transition focus:border-sky-300 focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="mb-1.5 block text-sm font-semibold">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="w-full rounded-2xl border border-white bg-white/80 px-4 py-3 text-sm outline-none transition focus:border-sky-300 focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-bold transition"
+          >
+            Masuk
+          </button>
+        </form>
+
+        <p class="mt-5 text-center text-xs text-ink-faint">
+          Akun dibuat berdua oleh admin aplikasi. Lupa password? Hubungi pasangan untuk reset di
+          Supabase.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,44 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+import AgendaApp from '../../components/agenda/AgendaApp';
+import { createClient } from '../../lib/supabase/server';
+import type { AgendaRow, ProfileRow } from '../../lib/agenda';
+
+const supabase = createClient(Astro);
+const {
+  data: { user },
+} = await supabase.auth.getUser();
+
+const [{ data: agendaData }, { data: profileData }] = await Promise.all([
+  supabase
+    .from('agendas')
+    .select('*')
+    .order('event_date', { ascending: true })
+    .order('start_time', { ascending: true }),
+  supabase.from('profiles').select('*'),
+]);
+
+const agendas = (agendaData ?? []) as AgendaRow[];
+const profiles = (profileData ?? []) as ProfileRow[];
+const me = profiles.find((p) => p.id === user?.id) ?? null;
+---
+
+<AppLayout title="Agenda" page="agenda">
+  <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-faint">Menu</p>
+      <h1 class="font-display text-2xl font-bold sm:text-3xl">Agenda</h1>
+      <p class="mt-1 text-sm text-ink-soft">
+        Klik tanggal untuk memilih, klik dua kali untuk langsung menambah.
+      </p>
+    </div>
+  </div>
+
+  <AgendaApp
+    client:load
+    initialAgendas={agendas}
+    profiles={profiles}
+    meId={user?.id ?? ''}
+    defaultReminderMinutes={me?.default_reminder_minutes ?? 60}
+  />
+</AppLayout>

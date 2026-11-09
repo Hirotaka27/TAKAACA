@@ -1,0 +1,33 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import HistoryList from '../components/agenda/HistoryList';
+import { createClient } from '../lib/supabase/server';
+import type { AgendaRow, ProfileRow } from '../lib/agenda';
+
+const supabase = createClient(Astro);
+const {
+  data: { user },
+} = await supabase.auth.getUser();
+
+const [{ data: agendaData }, { data: profileData }] = await Promise.all([
+  supabase
+    .from('agendas')
+    .select('*')
+    .in('status', ['done', 'cancelled'])
+    .order('event_date', { ascending: false }),
+  supabase.from('profiles').select('*'),
+]);
+
+const items = (agendaData ?? []) as AgendaRow[];
+const profiles = (profileData ?? []) as ProfileRow[];
+---
+
+<AppLayout title="History" page="history">
+  <div class="mb-5">
+    <p class="text-xs font-semibold uppercase tracking-wide text-ink-faint">Menu</p>
+    <h1 class="font-display text-2xl font-bold sm:text-3xl">History Agenda</h1>
+    <p class="mt-1 text-sm text-ink-soft">Semua agenda yang sudah selesai atau dibatalkan.</p>
+  </div>
+
+  <HistoryList client:load items={items} profiles={profiles} meId={user?.id ?? ''} />
+</AppLayout>

@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  /* Sky / biru muda - dominan */
+  --color-sky-50: #f2fafe;
+  --color-sky-100: #ddf3fb;
+  --color-sky-200: #bfe7f5;
+  --color-sky-300: #9ad8ee;
+  --color-sky-400: #6cc5e2;
+  --color-sky-500: #3fadd0;
+
+  /* Baby pink - dominan */
+  --color-blush-50: #fff5f9;
+  --color-blush-100: #fde4ee;
+  --color-blush-200: #f9cbde;
+  --color-blush-300: #f3afcb;
+  --color-blush-400: #eb8fb4;
+  --color-blush-500: #e06fa1;
+
+  /* Soft yellow - aksen */
+  --color-butter-100: #fff8db;
+  --color-butter-200: #ffefb8;
+  --color-butter-300: #fbe58f;
+  --color-butter-400: #f7d774;
+
+  /* Tinta */
+  --color-ink: #334155;
+  --color-ink-soft: #64748b;
+  --color-ink-faint: #94a3b8;
+
+  --font-display: "Quicksand", "Nunito", ui-rounded, system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--color-sky-50);
+  background-image:
+    radial-gradient(900px 600px at 8% -10%, color-mix(in srgb, var(--color-sky-200) 75%, transparent), transparent 65%),
+    radial-gradient(800px 520px at 95% 0%, color-mix(in srgb, var(--color-blush-100) 90%, transparent), transparent 60%),
+    radial-gradient(700px 700px at 50% 110%, color-mix(in srgb, var(--color-sky-100) 85%, transparent), transparent 70%),
+    radial-gradient(420px 300px at 78% 78%, color-mix(in srgb, var(--color-butter-100) 80%, transparent), transparent 70%),
+    linear-gradient(160deg, var(--color-sky-50) 0%, var(--color-blush-50) 55%, var(--color-sky-50) 100%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.glass {
+  background: color-mix(in srgb, #ffffff 74%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px -18px rgba(63, 173, 208, 0.55);
+}
+
+.btn-primary {
+  background-image: linear-gradient(135deg, var(--color-sky-300), var(--color-sky-400));
+  color: #fff;
+  box-shadow: 0 8px 18px -10px rgba(63, 173, 208, 0.9);
+}
+
+.btn-primary:hover {
+  background-image: linear-gradient(135deg, var(--color-sky-400), var(--color-sky-500));
+}
+
+.btn-soft {
+  background-image: linear-gradient(135deg, var(--color-blush-200), var(--color-blush-300));
+  color: #fff;
+  box-shadow: 0 8px 18px -10px rgba(224, 111, 161, 0.8);
+}
+
+.btn-soft:hover {
+  background-image: linear-gradient(135deg, var(--color-blush-300), var(--color-blush-400));
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-ink);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.chip-yellow {
+  background: linear-gradient(135deg, var(--color-butter-200), var(--color-butter-300));
+  color: #8a6d1d;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}

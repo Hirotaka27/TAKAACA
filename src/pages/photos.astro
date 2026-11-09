@@ -1,0 +1,63 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import PhotoGallery from '../components/photos/PhotoGallery';
+import { createClient } from '../lib/supabase/server';
+import { publicUrlFor } from '../lib/storage';
+import type { ProfileRow } from '../lib/agenda';
+
+const supabase = createClient(Astro);
+const {
+  data: { user },
+} = await supabase.auth.getUser();
+
+const [{ data: photoData }, { data: profileData }] = await Promise.all([
+  supabase
+    .from('photos')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(500),
+  supabase.from('profiles').select('*'),
+]);
+
+type Photo = {
+  id: string;
+  storage_path: string;
+  name: string;
+  mime_type: string | null;
+  size_bytes: number | null;
+  web_view_link: string | null;
+  uploaded_by: string;
+  created_at: string;
+};
+
+const photos = ((photoData ?? []) as Photo[]).map((p) => ({
+  ...p,
+  url: p.web_view_link || publicUrlFor(p.storage_path),
+}));
+const profiles = (profileData ?? []) as ProfileRow[];
+
+const errorMsg = Astro.url.searchParams.get('error');
+---
+
+<AppLayout title="Foto" page="photos">
+  <div class="mb-5">
+    <p class="text-xs font-semibold uppercase tracking-wide text-ink-faint">Menu</p>
+    <h1 class="font-display text-2xl font-bold sm:text-3xl">Foto</h1>
+    <p class="mt-1 text-sm text-ink-soft">Kenangan kita, tersimpan rapi di sini.</p>
+  </div>
+
+  {
+    errorMsg && (
+      <p class="mb-4 rounded-2xl bg-blush-100 px-4 py-3 text-sm font-semibold text-blush-500">
+        {errorMsg}
+      </p>
+    )
+  }
+
+  <PhotoGallery
+    client:load
+    initialPhotos={photos}
+    profiles={profiles}
+    meId={user?.id ?? ''}
+  />
+</AppLayout>
